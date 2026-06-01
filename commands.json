@@ -1,0 +1,64 @@
+{
+    "commands": {
+        "打开应用": {
+            "patterns": ["打开", "启动", "运行", "开启"],
+            "examples": [
+                "打开浏览器",
+                "打开微信",
+                "打开记事本",
+                "打开计算器"
+            ]
+        },
+        "搜索": {
+            "patterns": ["搜索", "查找", "百度", "google"],
+            "examples": [
+                "搜索人工智能",
+                "百度天气",
+                "google深度学习"
+            ]
+        },
+        "关闭应用": {
+            "patterns": ["关闭", "退出", "停止"],
+            "examples": [
+                "关闭浏览器",
+                "退出微信"
+            ]
+        },
+        "系统控制": {
+            "patterns": ["截图", "截屏", "锁屏", "关机", "重启", "睡眠"],
+            "examples": [
+                "截图",
+                "锁屏",
+                "关机",
+                "重启电脑"
+            ]
+        },
+        "音量控制": {
+            "patterns": ["音量", "声音", "调大", "调小", "静音"],
+            "examples": [
+                "调大音量",
+                "调小音量",
+                "静音"
+            ]
+        }
+    },
+    "supported_apps": {
+        "chrome": "Google Chrome",
+        "edge": "Microsoft Edge",
+        "firefox": "Mozilla Firefox",
+        "wechat": "微信",
+        "qq": "QQ",
+        "notepad": "记事本",
+        "calc": "计算器",
+        "explorer": "文件管理器",
+        "mspaint": "画图",
+        "word": "Microsoft Word",
+        "excel": "Microsoft Excel"
+    },
+    "search_engines": {
+        "google": "https://www.google.com/search?q=",
+        "baidu": "https://www.baidu.com/s?wd=",
+        "bing": "https://www.bing.com/search?q=",
+        "default": "https://www.bing.com/search?q="
+    }
+}
