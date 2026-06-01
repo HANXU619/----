@@ -42,6 +42,7 @@ class CommandParser:
                 r'关闭(.+)',
                 r'退出(.+)',
                 r'停止(.+)',
+                r'關閉(.+)',
                 r'关机'
             ],
             '系统控制': [
@@ -71,37 +72,6 @@ class CommandParser:
                 r'打开文件(.+)',
                 r'显示(.+)文件夹',
                 r'打开(.+)目录'
-            ],
-            '创建文件夹': [
-                r'创建文件夹(.+)',
-                r'新建文件夹(.+)',
-                r'创建目录(.+)',
-                r'新建目录(.+)'
-            ],
-            '创建文件': [
-                r'创建文件(.+)',
-                r'新建文件(.+)',
-                r'建立文件(.+)'
-            ],
-            '删除文件夹': [
-                r'删除文件夹(.+)',
-                r'删除(.+)文件夹',
-                r'删除目录(.+)',
-                r'删除(.+)目录',
-                r'删掉文件夹(.+)',
-                r'删掉(.+)文件夹',
-                r'移除文件夹(.+)',
-                r'移除(.+)文件夹',
-                r'^删除\s+([^文件]+)$'
-            ],
-            '删除文件': [
-                r'删除文件(.+)',
-                r'删掉文件(.+)',
-                r'移除文件(.+)',
-                r'删除(.+)文件$',
-                r'删掉(.+)文件$',
-                r'移除(.+)文件$',
-                r'^删除\s+(.+?)(?=\s+文件|\s+文件夹|\s+目录|$)'
             ]
         }
 
@@ -153,14 +123,12 @@ class CommandParser:
             '畫圖': '画图',
             '設置': '设置',
             '電腦': '电脑',
-            '住手': '助手',
-            '猪手': '助手',
         }
 
         self.common_apps = {
             'chrome': 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-            'wechat': 'C:\\Program Files\\Tencent\\WeChat\\WeChat.exe',
-            'qq': 'C:\\Program Files\\Tencent\\QQ\\NT\\QQ.exe',
+            'wechat': 'C:\\Program Files\\Tencent\\Weixin\\Weixin.exe',
+            'qq': 'C:\\Program Files\\Tencent\\QQNT\\QQ.exe',
             'notepad': 'notepad.exe',
             'calc': 'calc.exe',
             'explorer': 'explorer.exe',
@@ -277,28 +245,6 @@ class CommandParser:
         elif intent == '文件操作':
             params['path'] = match.group(1).strip()
 
-        elif intent in ['创建文件', '删除文件']:
-            if match.lastindex and match.group(1):
-                params['name'] = match.group(1).strip()
-            else:
-                name_text = text
-                for pattern in self.intent_patterns[intent]:
-                    name_text = re.sub(pattern, '', name_text).strip()
-                    if name_text:
-                        break
-                params['name'] = name_text
-
-        elif intent in ['创建文件夹', '删除文件夹']:
-            if match.lastindex and match.group(1):
-                params['name'] = match.group(1).strip()
-            else:
-                name_text = text
-                for pattern in self.intent_patterns[intent]:
-                    name_text = re.sub(pattern, '', name_text).strip()
-                    if name_text:
-                        break
-                params['name'] = name_text
-
         return params
 
     def _normalize_app_name(self, app_name: str) -> str:
@@ -368,26 +314,6 @@ class CommandParser:
             if 'app_name' not in params and not params.get('close_system'):
                 return False, "未指定要关闭的应用程序"
 
-        elif intent == '创建文件':
-            if 'name' not in params or not params['name']:
-                return False, "未指定要创建的文件名"
-            if len(params['name']) < 1:
-                return False, "文件名不能为空"
-
-        elif intent == '创建文件夹':
-            if 'name' not in params or not params['name']:
-                return False, "未指定要创建的文件夹名"
-            if len(params['name']) < 1:
-                return False, "文件夹名不能为空"
-
-        elif intent == '删除文件':
-            if 'name' not in params or not params['name']:
-                return False, "未指定要删除的文件"
-
-        elif intent == '删除文件夹':
-            if 'name' not in params or not params['name']:
-                return False, "未指定要删除的文件夹"
-
         return True, "命令有效"
 
     def generate_response(self, parsed_command: Dict, success: bool = True) -> str:
@@ -422,22 +348,6 @@ class CommandParser:
 
         elif intent == '文件操作':
             return "正在打开文件..."
-
-        elif intent == '创建文件':
-            name = parsed_command['params'].get('name', '')
-            return f"正在创建文件: {name}..."
-
-        elif intent == '创建文件夹':
-            name = parsed_command['params'].get('name', '')
-            return f"正在创建文件夹: {name}..."
-
-        elif intent == '删除文件':
-            name = parsed_command['params'].get('name', '')
-            return f"正在删除文件: {name}..."
-
-        elif intent == '删除文件夹':
-            name = parsed_command['params'].get('name', '')
-            return f"正在删除文件夹: {name}..."
 
         elif intent == 'unknown':
             keywords = self.extract_keywords(original_text)
